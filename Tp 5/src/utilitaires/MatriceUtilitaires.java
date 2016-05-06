@@ -1,5 +1,8 @@
 package utilitaires;
 
+import java.util.Iterator;
+import java.util.TreeSet;
+
 public class MatriceUtilitaires {
 
 	/**
@@ -15,9 +18,18 @@ public class MatriceUtilitaires {
 	 *
 	 * @return le déterminant de la matrice.
 	 */
-	// TODO getDeterminant - MANDAT 2 - Compléter le code de la méthode
 	public static int getDeterminant(int[][] mat) {
-		return 0;
+		int temp = 0;
+		int nbFois = mat.length - 2;
+		if (nbFois != 0) {
+			for (int i = 0; i < mat.length; i++) {
+				int mult = (int) (mat[i][0] * Math.pow(-1, i));
+				temp += mult * getDeterminant(getMatMineur(i, 0, mat));
+			}
+		} else {
+			temp = (mat[0][0] * mat[1][1]) - (mat[0][1] * mat[1][0]);
+		}
+		return temp;
 	}
 
 	/**
@@ -30,10 +42,20 @@ public class MatriceUtilitaires {
 	 *
 	 * @return la valeur du déterminant inverse ou 0
 	 */
-	// TODO getDeterminantInverseHill - MANDAT 2 - Compléter le code de la
-	// méthode
+	// TODO tests
 	public static int getDeterminantInverseHill(int valDet, int valMod) {
-		return 0;
+		TreeSet<Integer> premiers = (TreeSet<Integer>) MathUtilitaires.xPremierEntreEux(1, valMod);
+		boolean fini = false;
+		Iterator<Integer> iter = premiers.iterator();
+		int retour = 0;
+		while (!fini) {
+			Integer temp = iter.next();
+			if (((temp * valDet) % valMod) == 1) {
+				fini = true;
+				retour = temp;
+			}
+		}
+		return retour;
 	}
 
 	/**
@@ -45,9 +67,27 @@ public class MatriceUtilitaires {
 	 *
 	 * @return la matrice carrée des cofacteurs de la matrice d'origine
 	 */
-	// TODO getMatCofacteurs - MANDAT 2 - Compléter le code de la méthode
 	public static int[][] getMatCofacteurs(int[][] mat) {
-		return null;
+		int[][] matTemp = new int[mat.length][mat.length];
+		if (mat.length == 2) {
+			matTemp[0][0] = mat[1][1] * -1;
+			matTemp[1][1] = mat[0][0] * -1;
+			matTemp[0][1] = mat[1][0];
+			matTemp[1][0] = mat[0][1];
+		} else {
+			int mult = 0;
+			for (int i = 0; i < mat.length; i++) {
+				for (int j = 0; j < mat.length; j++) {
+					if ((mat.length % 2) == 0) {
+						mult = (int) Math.pow(-1, i + j);
+					} else {
+						mult = (int) Math.pow(-1, i + j + 1);
+					}
+					matTemp[i][j] = mult * getDeterminant(getMatMineur(i, j, mat));
+				}
+			}
+		}
+		return matTemp;
 	}
 
 	/**
@@ -61,9 +101,17 @@ public class MatriceUtilitaires {
 	 *
 	 * @return la matrice carrée M X N transposée
 	 */
-	// TODO getMatTranspose - Compléter le code de la méthode
+	// TODO tests
 	public static int[][] getMatTranspose(int[][] mat) {
-		return null;
+		int m = mat.length;
+		int n = mat[0].length;
+		int[][] transposee = new int[n][m];
+		for (int i = 0; i < m; i++) {
+			for (int j = 0; j < n; j++) {
+				transposee[j][i] = mat[i][j];
+			}
+		}
+		return transposee;
 	}
 
 	/**
@@ -76,9 +124,9 @@ public class MatriceUtilitaires {
 	 *
 	 * @return la matrice carrée N X N adjointe
 	 */
-	// TODO getMatAdjointe - MANDAT 2 - Compléter le code de la méthode
+	// TODO tests
 	public static int[][] getMatAdjointe(int[][] mat) {
-		return null;
+		return getMatTranspose(getMatCofacteurs(mat));
 	}
 
 	/**
@@ -99,9 +147,36 @@ public class MatriceUtilitaires {
 	 * @return la matrice carrée (N-1) X (N-1) mineure résultante
 	 *
 	 */
-	// TODO getMatMineur - Compléter le code de la méthode
-	private static int[][] getMatMineur(int ligne, int col, int[][] mat) {
-		return null;
+	public static int[][] getMatMineur(int ligne, int col, int[][] mat) {
+		int m = mat.length;
+		int[][] mineur = new int[m - 1][m - 1];
+		for (int i = 0; i < m; i++) {
+			if (i != ligne) {
+				if (i < ligne) {
+					for (int j = 0; j < m; j++) {
+						if (j != col) {
+							if (j < col) {
+								mineur[i][j] = mat[i][j]; // standard
+							} else {
+								mineur[i][j - 1] = mat[i][j]; // colonne sautée
+							}
+						}
+					}
+				} else {
+					for (int j = 0; j < m; j++) {
+						if (j != col) {
+							if (j < col) {
+								mineur[i - 1][j] = mat[i][j]; // ligne sautée
+							} else {
+								mineur[i - 1][j - 1] = mat[i][j]; // ligne+colonne
+																	// sautées
+							}
+						}
+					}
+				}
+			}
+		}
+		return mineur;
 	}
 
 	/**
@@ -115,9 +190,17 @@ public class MatriceUtilitaires {
 	 *
 	 * @return la matrice résultante de la multiplication avec un scalaire
 	 */
-	// TODO getMatMultScalaire - Compléter le code de la méthode
+	// TODO tests
 	public static int[][] getMatMultScalaire(int[][] mat, float pScalaire) {
-		return null;
+		int m = mat.length;
+		int n = mat[0].length;
+		int[][] multipliee = new int[m][n];
+		for (int i = 0; i < m; i++) {
+			for (int j = 0; j < n; j++) {
+				multipliee[i][j] = Math.round(mat[i][j] * pScalaire);
+			}
+		}
+		return multipliee;
 	}
 
 	/**
@@ -131,9 +214,17 @@ public class MatriceUtilitaires {
 	 *
 	 * @return la matrice résultante de l'application d'un modulo
 	 */
-	// TODO getMatModuloX - Compléter le code de la méthode
+	// TODO tests
 	public static int[][] getMatModuloX(int[][] mat, int pMod) {
-		return null;
+		int m = mat.length;
+		int n = mat[0].length;
+		int[][] modulee = new int[m][n];
+		for (int i = 0; i < m; i++) {
+			for (int j = 0; j < n; j++) {
+				modulee[i][j] = mat[i][j] % pMod;
+			}
+		}
+		return modulee;
 	}
 
 	/**
@@ -153,8 +244,16 @@ public class MatriceUtilitaires {
 	 *
 	 * @return la chaîne de caractères
 	 */
-	// TODO toStringMat - Compléter le code de la méthode
+	// TODO tests
 	public static String toStringMat(int[][] pMat) {
-		return "";
+		String s = "";
+		for (int i = 0; i < pMat.length; i++) {
+			s += "[";
+			for (int j = 0; j < pMat[i].length; j++) {
+				s += pMat[i][j] + ", ";
+			}
+			s += "]\n";
+		}
+		return s;
 	}
 }

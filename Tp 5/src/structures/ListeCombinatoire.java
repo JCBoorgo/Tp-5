@@ -1,5 +1,6 @@
 package structures;
 
+import java.util.ArrayList;
 import java.util.List;
 import exceptions.ConstructeurException;
 
@@ -36,8 +37,17 @@ public class ListeCombinatoire {
 	 *
 	 * @throws ConstructeurException
 	 */
-	// TODO ListeCombinatoire - Compléter le code de la méthode
+	// TODO tests
 	public ListeCombinatoire(int pValDebut, int pValFin, int pLongCombinaison) throws ConstructeurException {
+		if (validerLimitesEns(pValDebut, pValFin) && validerLongCombinaison(pLongCombinaison, (pValFin - pValDebut))) {
+			this.debutEns = pValDebut;
+			this.finEns = pValFin;
+			this.longCombinaison = pLongCombinaison;
+			this.listeDeCombinaisons = new ArrayList<List<Integer>>();
+			this.ensembleValeurs = new ArrayList<>();
+		} else {
+			throw new ConstructeurException();
+		}
 	}
 
 	public int getDebutEns() {
@@ -69,7 +79,8 @@ public class ListeCombinatoire {
 	}
 
 	private void setLimitesEns(int pDebutEns, int pFinEns) {
-		//Au besoin, inversion des valeurs pour simplement éviter les erreurs...
+		// Au besoin, inversion des valeurs pour simplement éviter les
+		// erreurs...
 		boolean ok = validerLimitesEns(pDebutEns = Math.min(pDebutEns, pFinEns),
 				pFinEns = Math.max(pDebutEns, pFinEns));
 
@@ -113,9 +124,13 @@ public class ListeCombinatoire {
 	 *
 	 * @return une liste d'entiers entre les bornes début et fin
 	 */
-	// TODO genererEnsembleValeurs - Compléter le code de la méthode
+	// TODO tests
 	public List<Integer> genererEnsembleValeurs() {
-		return null;
+		List<Integer> liste = new ArrayList<Integer>();
+		for (int i = debutEns; i <= finEns; i++) {
+			liste.add(new Integer(i));
+		}
+		return liste;
 	}
 
 	/**
@@ -128,9 +143,26 @@ public class ListeCombinatoire {
 	 * Attention : Bien faire vos tests, c'est très facile de vous tromper...
 	 *
 	 */
-	// TODO produireListeCombinaisons - MANDAT 1 ou 2 - Compléter le code de la méthode
+	// TODO TESTS
 	private void produireListeCombinaisons(List<Integer> pEnsembleValeurs, int pLongueurRestante,
 			List<List<Integer>> pListeDeCombinaisons, List<Integer> pCombinaisonCourante) {
+		int grosseur = pCombinaisonCourante.size();
+		int start = grosseur == 0 ? 1 : pCombinaisonCourante.get(grosseur - 1);
+		if (pLongueurRestante > 1) {
+			for (int i = start; i <= pEnsembleValeurs.size(); i++) {
+				pCombinaisonCourante.add(new Integer(i));
+				produireListeCombinaisons(pEnsembleValeurs, pLongueurRestante - 1, pListeDeCombinaisons,
+						pCombinaisonCourante);
+			}
+		} else {
+			for (int i = start; i <= pEnsembleValeurs.size(); i++) {
+				List<Integer> combTemp = new ArrayList<Integer>();
+				combTemp.addAll(pCombinaisonCourante);
+				combTemp.add(new Integer(i));
+				pListeDeCombinaisons.add(combTemp);
+			}
+		}
+		pCombinaisonCourante.remove(pCombinaisonCourante.size() - 1);
 	}
 
 	/**

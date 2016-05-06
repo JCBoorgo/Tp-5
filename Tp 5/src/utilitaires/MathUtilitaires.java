@@ -154,7 +154,7 @@ public class MathUtilitaires {
 			debut = 1;
 		}
 		SortedSet<Integer> diviseurs = diviseursDe(valRef);
-		TreeSet<Integer> premiers = new TreeSet<Integer>();
+		SortedSet<Integer> premiers = new TreeSet<Integer>();
 		if (valDepart <= 1) {
 			premiers.add(new Integer(1));
 		}

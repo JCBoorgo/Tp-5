@@ -1,7 +1,13 @@
 package utilitaires;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.swing.JFileChooser;
 
@@ -23,8 +29,16 @@ public class FichierUtilitaires {
 	 *
 	 * @return vrai si le message a été enregistrer.
 	 */
-	// TODO enregistrerMessage - Compléter le code de la méthode
+	// TODO tests
 	public static boolean enregistrerMessage(String message, File nomFichier) {
+		try {
+			PrintWriter sortie = new PrintWriter(new FileWriter(nomFichier));
+			sortie.println(message);
+			sortie.flush();
+			sortie.close();
+		} catch (IOException e) {
+			System.out.println(e);
+		}
 		return true;
 	}
 
@@ -36,9 +50,17 @@ public class FichierUtilitaires {
 	 *
 	 * @return la ligne lue
 	 */
-	// TODO lireMessage - Compléter le code de la méthode
+	// TODO tests
 	public static String lireMessage(File nomFichier) {
-		return "";
+		String ligne = null;
+		try {
+			BufferedReader buffer = new BufferedReader(new FileReader(nomFichier));
+			ligne = buffer.readLine();
+			buffer.close();
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+		return ligne;
 	}
 
 	/**
@@ -52,9 +74,22 @@ public class FichierUtilitaires {
 	 * @return un SortSet des mots du dictionnaire ou null s'il n'y a pas de mot
 	 *         dans le fichier.
 	 */
-	// TODO lireDictionnaire - Compléter le code de la méthode
+	// TODO tests
 	public static SortedSet<String> lireDictionnaire(File nomDic) {
-		return null;
+		String mot;
+		TreeSet<String> motsListe = new TreeSet<String>();
+		try {
+			BufferedReader buffer = new BufferedReader(new FileReader(nomDic));
+			mot = buffer.readLine();
+			while (mot != null) {
+				motsListe.add(mot);
+				mot = buffer.readLine();
+			}
+			buffer.close();
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+		return motsListe;
 	}
 
 	/**
