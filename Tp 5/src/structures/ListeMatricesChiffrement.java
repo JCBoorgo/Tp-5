@@ -2,6 +2,9 @@ package structures;
 
 import java.util.*;
 
+import exceptions.ConstructeurException;
+import utilitaires.MatriceUtilitaires;
+
 /**
  * Classe qui permet de faire la gestion des matrices candidates pour le chiffre
  * de Hill. Les matrices sont produites à partir des combinaisons sans ordre et
@@ -144,25 +147,35 @@ public class ListeMatricesChiffrement implements iMatrice {
 	}
 
 	@Override
-	// TODO choisirMatriceCourante - Compléter le code de la méthode
+	// TODO tests
 	public void choisirMatriceCourante() {
+		int index = (int) (Math.random() * getNombreMatricesCandidates());
+		setMatriceCourante(listeMatricesCandidates.get(index));
 	}
 
 	@Override
-	// TODO choisirMatriceCourante - Compléter le code de la méthode
+	// TODO tests
 	public void choisirMatriceCourante(int index) {
+		setMatriceCourante(listeMatricesCandidates.get(index));
 	}
 
 	@Override
-	// TODO getCopieMatriceCourante - Compléter le code de la méthode
+	// TODO tests
 	public int[][] getCopieMatriceCourante() {
-		return null;
+		return getMatriceCourante().clone();
 	}
 
 	@Override
-	// TODO getMatriceCouranteInverseHill - Compléter le code de la méthode
+	// TODO tests pis vérifer que jme suis pas fourré!
 	public int[][] getMatriceCouranteInverseHill() {
-		return null;
+		int[][] temp = getCopieMatriceCourante();
+		int[][] adj = MatriceUtilitaires.getMatAdjointe(temp);
+		int det = MatriceUtilitaires.getDeterminant(temp);
+		int detHill = MatriceUtilitaires.getDeterminantInverseHill(det, getCoefDansZ());
+		temp = MatriceUtilitaires.getMatMultScalaire(adj, detHill / det);
+		// Reste juste à mettre le modulo
+		temp = MatriceUtilitaires.getMatModuloX(temp, getCoefDansZ());
+		return temp;
 	}
 
 	/**

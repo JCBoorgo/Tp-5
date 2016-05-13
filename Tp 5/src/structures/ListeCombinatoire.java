@@ -40,11 +40,12 @@ public class ListeCombinatoire {
 	// TODO tests
 	public ListeCombinatoire(int pValDebut, int pValFin, int pLongCombinaison) throws ConstructeurException {
 		if (validerLimitesEns(pValDebut, pValFin) && validerLongCombinaison(pLongCombinaison, (pValFin - pValDebut))) {
-			this.debutEns = pValDebut;
-			this.finEns = pValFin;
-			this.longCombinaison = pLongCombinaison;
-			this.listeDeCombinaisons = new ArrayList<List<Integer>>();
-			this.ensembleValeurs = new ArrayList<>();
+			setLimitesEns(pValDebut, pValFin);
+			setLongCombinaison(pLongCombinaison);
+			setListeDeCombinaisons(new ArrayList<List<Integer>>());
+			setEnsembleValeurs(new ArrayList<>());
+			produireListeCombinaisons(getEnsembleValeurs(), getLongCombinaison(), getListeDeCombinaisons(),
+					new ArrayList<Integer>());
 		} else {
 			throw new ConstructeurException();
 		}
@@ -183,9 +184,15 @@ public class ListeCombinatoire {
 	 * </pre>
 	 *
 	 */
-	// TODO toString - Compléter le code de la méthode
+	// TODO tests
 	@Override
 	public String toString() {
-		return "";
+		String s = "";
+		s += "Limites de l'ensemble : ";
+		s += "[" + getDebutEns() + "," + getFinEns() + "]\n";
+		s += "Longueur combinaison : " + getLongCombinaison() + "\n";
+		s += "Ensemble : " + getEnsembleValeurs().toString() + "\n";
+		s += "Voici les " + getListeDeCombinaisons().size() + " combinaisons : " + getListeDeCombinaisons();
+		return s;
 	}
 }
