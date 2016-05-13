@@ -3,6 +3,7 @@ package structures;
 import java.util.*;
 
 import exceptions.ConstructeurException;
+import utilitaires.MathUtilitaires;
 import utilitaires.MatriceUtilitaires;
 
 /**
@@ -65,9 +66,17 @@ public class ListeMatricesChiffrement implements iMatrice {
 	 *
 	 * @throws ConstructeurException
 	 */
-	// TODO ListeMatricesChiffrement - Compléter le code de la méthode
+	// TODO tests
 	public ListeMatricesChiffrement(int pBorneInf, int pBorneSup, int pDimension, int pCoefDansZ)
 			throws ConstructeurException {
+		if (validerBornes(pBorneInf, pBorneSup) && validerDimension(pDimension) && validerCoefDansZ(pCoefDansZ)) {
+			setBornes(pBorneInf, pBorneSup);
+			setCoefDansZ(pCoefDansZ);
+			setDimension(pDimension);
+			genererListeMatrices(new ListeCombinatoire(pBorneInf, pBorneSup, pDimension * pDimension));
+		} else {
+			throw new ConstructeurException();
+		}
 	}
 
 	public int getBorneInf() {
@@ -193,7 +202,22 @@ public class ListeMatricesChiffrement implements iMatrice {
 	 * @param pListe,
 	 *            la liste des combinatoires selon les données de l'objet...
 	 */
-	// TODO genererListeMatrices - Compléter le code de la méthode
+	// TODO tests
 	private void genererListeMatrices(ListeCombinatoire pListe) {
+		this.listeMatricesCandidates = new LinkedList<int[][]>();
+		int limite = pListe.getTailleListeDeCombinaisons();
+		for (int i = 0; i < limite; i++) {
+			ArrayList<Integer> temp = (ArrayList<Integer>) pListe.getCombinaison(i);
+			int[][] matrice = new int[this.dimension][this.dimension];
+			for (int j = 0; j < this.dimension; j++) {
+				for (int k = 0; k < this.dimension; k++) {
+					matrice[j][k] = temp.get(j * this.dimension + k);
+				}
+			}
+			int det = MatriceUtilitaires.getDeterminant(matrice);
+			if (MathUtilitaires.PGCD(det, getCoefDansZ()) == 1) {
+				this.listeMatricesCandidates.add(matrice);
+			}
+		}
 	}
 }

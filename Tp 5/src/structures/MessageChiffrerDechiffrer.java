@@ -9,7 +9,7 @@ import utilitaires.MatriceUtilitaires;
 
 public class MessageChiffrerDechiffrer implements iCrypto {
 	public static final float POURCENTAGE_ACCEPTABLE = 0.7f;
-	public static final char CAR_DE_COMPLEMENT = 'X';
+	public static final char CAR_DE_COMPLEMENT = ' ';
 
 	private VecteurDeCaracteres vecCaracteres = null;
 	private ListeMatricesChiffrement listeMatricesCandidates = null;
@@ -31,10 +31,16 @@ public class MessageChiffrerDechiffrer implements iCrypto {
 	 *
 	 * @throws ConstructeurException
 	 */
-	// TODO MessageChiffrerDechiffrer - Compléter le code de la méthode
-	public MessageChiffrerDechiffrer(VecteurDeCaracteres vecCars,
-			ListeMatricesChiffrement listeMats, SortedSet<String> dico)
-			throws ConstructeurException {
+	// TODO tests
+	public MessageChiffrerDechiffrer(VecteurDeCaracteres vecCars, ListeMatricesChiffrement listeMats,
+			SortedSet<String> dico) throws ConstructeurException {
+		if (validerDico(dico) && validerMatsEncodage(listeMats) && validerVecCaracteres(vecCars)) {
+			setDico(dico);
+			setMatsEncodage(listeMats);
+			setVecCaracteres(vecCars);
+		} else {
+			throw new ConstructeurException();
+		}
 	}
 
 	private void setVecCaracteres(VecteurDeCaracteres pVec) {
@@ -71,35 +77,97 @@ public class MessageChiffrerDechiffrer implements iCrypto {
 	 * Obtenir la matrice courante qui a été utilisé par l'encodage ou le
 	 * décodage. Très utile pour les tests.
 	 *
-	 * @return la matrice courante utilisée à partir de l'objet "listeMatricesCandidates".
+	 * @return la matrice courante utilisée à partir de l'objet
+	 *         "listeMatricesCandidates".
 	 */
 	public int[][] getMatriceCourante() {
 		return listeMatricesCandidates.getCopieMatriceCourante();
 	}
 
-
 	@Override
-	// TODO validerMessageSelonDico - Compléter le code de la méthode
-	public boolean validerMessageSelonDico(String message,
-			float pourcentageDeReussite) {
-		return true;
+	// TODO tests
+	public boolean validerMessageSelonDico(String message, float pourcentageDeReussite) {
+		String[] mots = message.trim().split("\\s");
+		int nbCaracteres = 0;
+		int caracteresEgaux = 0;
+		for (int i = 0; i < mots.length; i++) {
+			nbCaracteres += mots[i].length();
+			if (dico.contains(mots[i])) {
+				caracteresEgaux += mots[i].length();
+			}
+		}
+		float pourcentage = caracteresEgaux / nbCaracteres;
+		return pourcentage > pourcentageDeReussite;
 	}
 
 	@Override
-	// TODO ajusterMessageBrute - Compléter le code de la méthode
+	// TODO tests
 	public String ajusterMessageBrute(String message, int longVoulue) {
-		return "";
+		String s = message;
+		while (message.length() < longVoulue) {
+			s += CAR_DE_COMPLEMENT;
+		}
+		return s;
+	}
+
+	//TODO TESTER SI ON S'EST PLANTÉS
+	public String codeDecode(String message, int[][] matrice) {
+		int dimension = listeMatricesCandidates.getDimension();
+		String texteModifie = "";
+		String boutDeTexte = "";
+		// ajuster la taille du message
+		int tailleMessage = message.length() + (dimension - (message.length() % dimension));
+		String messageAjuste = ajusterMessageBrute(message, tailleMessage);
+		// Nombre de fois qu'on va multiplier
+		int nbPaquetsDeLettre = tailleMessage / dimension;
+		// On commence le traitement
+		for (int i = 0; i < nbPaquetsDeLettre; i++) {
+			// Bout à traiter
+			boutDeTexte = messageAjuste.substring(i * dimension, (i + 1) * dimension - 1);
+			// Tableau contenant les index de lettres à traiter
+			int[] tabValLettres = new int[dimension];
+			for (int j = 0; j < dimension; j++) {
+				tabValLettres[j] = vecCaracteres.getIndice(boutDeTexte.charAt(j));
+			}
+			// Tableau avec nouvelles valeurs de lettres
+			int[] tabLettresModifiees = new int[dimension];
+			// Multiplier le stuff
+			for (int j = 0; j < dimension; j++) {
+				for (int k = 0; k < dimension; k++) {
+					tabLettresModifiees[j] += matrice[j][k] * tabValLettres[k];
+				}
+			}
+			// Faire les modulo
+			for (int j = 0; j < dimension; j++) {
+				tabLettresModifiees[j] = tabLettresModifiees[j] % vecCaracteres.getTaille();
+			}
+			// Convertir indices en lettres
+			char[] tabLettresFinales = new char[dimension];
+			for (int j = 0; j < dimension; j++) {
+				tabLettresFinales[j] = vecCaracteres.getCaractere(tabLettresModifiees[j]);
+			}
+			// Ajouter les lettres à la string du message
+			for (int j = 0; j < dimension; j++){
+				texteModifie += tabLettresFinales[j];
+			}
+		}
+		return texteModifie;
 	}
 
 	@Override
-	// TODO encoder - Compléter le code de la méthode
+	// TODO tests
 	public String encoder(String message) {
-		return "";
+		// Setter la matrice courante
+		String s = codeDecode(message, getMatriceCourante());
+		return s;
 	}
 
 	@Override
-	// TODO decoder - Compléter le code de la méthode
+	// TODO tests
 	public String decoder(String message) {
-		return "";
+		// Setter la matrice inverse de Hill
+		int[][] matrice = listeMatricesCandidates.getMatriceCouranteInverseHill();
+		String s = codeDecode(message, matrice);
+		return s;
 	}
 }

@@ -37,13 +37,12 @@ public class ListeCombinatoire {
 	 *
 	 * @throws ConstructeurException
 	 */
-	// TODO tests
 	public ListeCombinatoire(int pValDebut, int pValFin, int pLongCombinaison) throws ConstructeurException {
 		if (validerLimitesEns(pValDebut, pValFin) && validerLongCombinaison(pLongCombinaison, (pValFin - pValDebut))) {
 			setLimitesEns(pValDebut, pValFin);
 			setLongCombinaison(pLongCombinaison);
 			setListeDeCombinaisons(new ArrayList<List<Integer>>());
-			setEnsembleValeurs(new ArrayList<>());
+			setEnsembleValeurs(genererEnsembleValeurs());
 			produireListeCombinaisons(getEnsembleValeurs(), getLongCombinaison(), getListeDeCombinaisons(),
 					new ArrayList<Integer>());
 		} else {
@@ -125,7 +124,6 @@ public class ListeCombinatoire {
 	 *
 	 * @return une liste d'entiers entre les bornes début et fin
 	 */
-	// TODO tests
 	public List<Integer> genererEnsembleValeurs() {
 		List<Integer> liste = new ArrayList<Integer>();
 		for (int i = debutEns; i <= finEns; i++) {
@@ -144,26 +142,25 @@ public class ListeCombinatoire {
 	 * Attention : Bien faire vos tests, c'est très facile de vous tromper...
 	 *
 	 */
-	// TODO TESTS
 	private void produireListeCombinaisons(List<Integer> pEnsembleValeurs, int pLongueurRestante,
 			List<List<Integer>> pListeDeCombinaisons, List<Integer> pCombinaisonCourante) {
 		int grosseur = pCombinaisonCourante.size();
-		int start = grosseur == 0 ? 1 : pCombinaisonCourante.get(grosseur - 1);
+		int start = grosseur == 0 ? this.debutEns : (pCombinaisonCourante.get(grosseur - 1) + 1);
 		if (pLongueurRestante > 1) {
-			for (int i = start; i <= pEnsembleValeurs.size(); i++) {
+			for (int i = start; i <= pEnsembleValeurs.get(pEnsembleValeurs.size() - 1); i++) {
 				pCombinaisonCourante.add(new Integer(i));
 				produireListeCombinaisons(pEnsembleValeurs, pLongueurRestante - 1, pListeDeCombinaisons,
 						pCombinaisonCourante);
+				pCombinaisonCourante.remove(pCombinaisonCourante.size() - 1);
 			}
 		} else {
-			for (int i = start; i <= pEnsembleValeurs.size(); i++) {
+			for (int i = start; i <= pEnsembleValeurs.get(pEnsembleValeurs.size() - 1); i++) {
 				List<Integer> combTemp = new ArrayList<Integer>();
 				combTemp.addAll(pCombinaisonCourante);
 				combTemp.add(new Integer(i));
 				pListeDeCombinaisons.add(combTemp);
 			}
 		}
-		pCombinaisonCourante.remove(pCombinaisonCourante.size() - 1);
 	}
 
 	/**
@@ -184,7 +181,6 @@ public class ListeCombinatoire {
 	 * </pre>
 	 *
 	 */
-	// TODO tests
 	@Override
 	public String toString() {
 		String s = "";

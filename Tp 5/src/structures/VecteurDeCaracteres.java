@@ -28,8 +28,12 @@ public class VecteurDeCaracteres {
 	 *
 	 * @throws ArrayIndexOutOfBoundsException
 	 */
-	// TODO VecteurDeCaracteres - Compléter le code de la méthode
+	// TODO tests
 	public VecteurDeCaracteres() throws ConstructeurException {
+		this.tableCaracteres = new LinkedList<Character>();
+		for (int i = 0; i < TAB_CHAR.length; i++) {
+			this.tableCaracteres.add(TAB_CHAR[i]);
+		}
 	}
 
 	/**
@@ -37,8 +41,12 @@ public class VecteurDeCaracteres {
 	 * caractères à partir du tableau de "char" reçu. Met tous les caractères en
 	 * majuscule.
 	 */
-	// TODO VecteurDeCaracteres - Compléter le code de la méthode
+	// TODO tests
 	public VecteurDeCaracteres(char[] tabChar) throws ConstructeurException {
+		this.tableCaracteres = new LinkedList<Character>();
+		for (int i = 0; i < tabChar.length; i++) {
+			this.tableCaracteres.add(tabChar[i]);
+		}
 	}
 
 	/**
@@ -51,9 +59,9 @@ public class VecteurDeCaracteres {
 	 *
 	 * @throws ArrayIndexOutOfBoundsException
 	 */
-	// TODO getCaractere - Compléter le code de la méthode
+	// TODO tests
 	public char getCaractere(int index) throws ArrayIndexOutOfBoundsException {
-		return ' ';
+		return this.tableCaracteres.get(index);
 	}
 
 	/**
@@ -64,9 +72,9 @@ public class VecteurDeCaracteres {
 	 *
 	 * @return l'indice du caractère ou -1 si le caractères n'est pas trouvé
 	 */
-	// TODO getIndice - Compléter le code de la méthode
+	// TODO tests
 	public int getIndice(char car) {
-		return 0;
+		return this.tableCaracteres.indexOf(car);
 	}
 
 	/**
@@ -74,9 +82,9 @@ public class VecteurDeCaracteres {
 	 *
 	 * @return la taille
 	 */
-	// TODO getTaille - Compléter le code de la méthode
+	// TODO tests
 	public int getTaille() {
-		return 0;
+		return this.tableCaracteres.size();
 	}
 
 	/**
@@ -89,9 +97,16 @@ public class VecteurDeCaracteres {
 	 * TableDeCorrespondance = [A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z,  , -]
 	 * </pre>
 	 */
-	// TODO toString - Compléter le code de la méthode
+	// TODO tests
+	// TODO y'a une erreur qui pop ici.
 	@Override
 	public String toString() {
-		return "Table de correspondance = " + this.tableCaracteres;
+		ListIterator temp = this.tableCaracteres.listIterator(0);
+		String s = "";
+		while (temp.hasNext()) {
+			s += (String) temp.next();
+			s += ", ";
+		}
+		return "Table de correspondance = " + "[" + s + "]";
 	}
 }

@@ -4,6 +4,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 public class MathUtilitaires {
+	//TODO Vrais tests, au moins ceux de Jocelyn passent
 
 	/**
 	 * Calcule de la factorielle d'une valeur > ou = à 1. Pourrait être récursif
@@ -16,7 +17,7 @@ public class MathUtilitaires {
 	// TODO tests
 	public static double fact(int valFact) {
 		double retour = 0;
-		if (valFact == 1) {
+		if (valFact <= 1) {
 			retour = 1;
 		} else {
 			retour = valFact * fact(valFact - 1);
@@ -43,16 +44,17 @@ public class MathUtilitaires {
 	// TODO tests
 	public static int modulo(int pVal, int pMod) throws ArithmeticException {
 		int temp = pVal;
-		if (pMod == 0) {
+		int vraiMod = Math.abs(pMod);
+		if (vraiMod == 0) {
 			throw new ArithmeticException();
 		} else {
 			if (pVal > 0) {
-				while (temp >= pMod) {
-					temp -= pMod;
+				while (temp >= vraiMod) {
+					temp -= Math.abs(vraiMod);
 				}
 			} else {
 				while (temp < 0) {
-					temp += pMod;
+					temp += Math.abs(vraiMod);
 				}
 			}
 		}
@@ -72,7 +74,7 @@ public class MathUtilitaires {
 	// TODO tests
 	public static SortedSet<Integer> diviseursDe(int pVal) {
 		int nombre = Math.abs(pVal);
-		int limite = (int) Math.floor(Math.sqrt(pVal));
+		int limite = (int) Math.floor(Math.sqrt(nombre));
 		TreeSet<Integer> liste = new TreeSet<Integer>();
 		if (nombre != 0) {
 			for (int i = 1; i <= limite; i++) {
@@ -184,16 +186,22 @@ public class MathUtilitaires {
 	public static int PGCD(int pVal1, int pVal2) {
 		SortedSet<Integer> diviseurs1 = diviseursDe(pVal1);
 		SortedSet<Integer> diviseurs2 = diviseursDe(pVal2);
-		int compteur = (pVal1 < pVal2) ? pVal1 : pVal2;
+		int compteur = (pVal1 < pVal2) ? Math.abs(pVal1) : Math.abs(pVal2);
 		int nombre = 1;
 		boolean fin = false;
-		while (!fin) {
-			if ((diviseurs1.contains(new Integer(compteur)) && diviseurs2.contains(new Integer(compteur)))) {
-				nombre = compteur;
-				fin = true;
-			} else if (compteur == 1) {
-				fin = true;
+		if ((diviseurs1 != null) && (diviseurs2 != null)) {
+			while (!fin) {
+				if ((diviseurs1.contains(new Integer(compteur)) && diviseurs2.contains(new Integer(compteur)))) {
+					nombre = compteur;
+					fin = true;
+				} else if (compteur == 1) {
+					fin = true;
+				}
+				compteur--;
 			}
+		} else {
+			nombre = 0;
+			;
 		}
 		return nombre;
 	}
@@ -235,7 +243,7 @@ public class MathUtilitaires {
 	 *
 	 * @return le nombre de combinaison possible.
 	 */
-	//TODO tests...?
+	// TODO tests...?
 	public static int nbrCombinaison(int nbrElement, int nbrElementPris) {
 		return (int) ((MathUtilitaires.fact(nbrElement) / MathUtilitaires.fact(nbrElement - nbrElementPris))
 				/ MathUtilitaires.fact(nbrElementPris));

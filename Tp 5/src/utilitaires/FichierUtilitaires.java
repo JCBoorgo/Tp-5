@@ -96,6 +96,22 @@ public class FichierUtilitaires {
 	 * Obtenir le nom du fichier de l'utilisateur à partir d'une boîte de
 	 * dialogue graphique.
 	 *
+	 * @return un File, le fichier sélectionné ou null
+	 */
+	public static File obtenirNomFichier(String option) {
+		File f = null;
+		JFileChooser chooser = new JFileChooser(".");
+
+		if (chooser.showDialog(null, option) == JFileChooser.APPROVE_OPTION)
+			f = chooser.getSelectedFile();
+
+		return f;
+	}
+
+	/**
+	 * Obtenir le nom du fichier de l'utilisateur à partir d'une boîte de
+	 * dialogue graphique.
+	 *
 	 * @param option
 	 *            le nom du bouton principal
 	 * @param le

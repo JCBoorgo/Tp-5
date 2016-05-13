@@ -40,7 +40,7 @@ public class MessageChiffrerDechiffrer_SimpleTest {
 		    + listeDeMatricesCandidates.getDimension() + " X "
 		    + listeDeMatricesCandidates.getDimension()
 		    + " candidates : "
-		    + listeDeMatricesCandidates.getNombreMatrices());
+		    + listeDeMatricesCandidates.getNombreMatricesCandidates());
 
 	    System.out.println();
 	    System.out.println("Message à chiffrer : [" + message
