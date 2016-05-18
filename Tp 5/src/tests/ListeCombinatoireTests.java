@@ -27,6 +27,8 @@ public class ListeCombinatoireTests {
 		System.out.println(l4.toString());
 		// FONCTIONNE.
 		// Toutes les combinaisons ont été vérifiées, promis.
+		// Les autres méthodes ne seront pas testées en tant que tel, vu que le
+		// toString et le constructeur touchent à tout
 	}
 
 }

@@ -28,7 +28,6 @@ public class VecteurDeCaracteres {
 	 *
 	 * @throws ArrayIndexOutOfBoundsException
 	 */
-	// TODO tests
 	public VecteurDeCaracteres() throws ConstructeurException {
 		this.tableCaracteres = new LinkedList<Character>();
 		for (int i = 0; i < TAB_CHAR.length; i++) {
@@ -41,7 +40,6 @@ public class VecteurDeCaracteres {
 	 * caractères à partir du tableau de "char" reçu. Met tous les caractères en
 	 * majuscule.
 	 */
-	// TODO tests
 	public VecteurDeCaracteres(char[] tabChar) throws ConstructeurException {
 		this.tableCaracteres = new LinkedList<Character>();
 		for (int i = 0; i < tabChar.length; i++) {
@@ -59,7 +57,6 @@ public class VecteurDeCaracteres {
 	 *
 	 * @throws ArrayIndexOutOfBoundsException
 	 */
-	// TODO tests
 	public char getCaractere(int index) throws ArrayIndexOutOfBoundsException {
 		return this.tableCaracteres.get(index);
 	}
@@ -72,9 +69,9 @@ public class VecteurDeCaracteres {
 	 *
 	 * @return l'indice du caractère ou -1 si le caractères n'est pas trouvé
 	 */
-	// TODO tests
 	public int getIndice(char car) {
-		return this.tableCaracteres.indexOf(car);
+		char temp = Character.toUpperCase(car);
+		return this.tableCaracteres.indexOf(temp);
 	}
 
 	/**
@@ -82,7 +79,6 @@ public class VecteurDeCaracteres {
 	 *
 	 * @return la taille
 	 */
-	// TODO tests
 	public int getTaille() {
 		return this.tableCaracteres.size();
 	}
@@ -97,7 +93,6 @@ public class VecteurDeCaracteres {
 	 * TableDeCorrespondance = [A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z,  , -]
 	 * </pre>
 	 */
-	// TODO tests
 	@Override
 	public String toString() {
 		String s = "";

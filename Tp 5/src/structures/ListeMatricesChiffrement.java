@@ -66,7 +66,6 @@ public class ListeMatricesChiffrement implements iMatrice {
 	 *
 	 * @throws ConstructeurException
 	 */
-	// TODO tests
 	public ListeMatricesChiffrement(int pBorneInf, int pBorneSup, int pDimension, int pCoefDansZ)
 			throws ConstructeurException {
 		if (validerBornes(pBorneInf, pBorneSup) && validerDimension(pDimension) && validerCoefDansZ(pCoefDansZ)) {
@@ -74,6 +73,7 @@ public class ListeMatricesChiffrement implements iMatrice {
 			setCoefDansZ(pCoefDansZ);
 			setDimension(pDimension);
 			genererListeMatrices(new ListeCombinatoire(pBorneInf, pBorneSup, pDimension * pDimension));
+			choisirMatriceCourante();
 		} else {
 			throw new ConstructeurException();
 		}
@@ -156,33 +156,30 @@ public class ListeMatricesChiffrement implements iMatrice {
 	}
 
 	@Override
-	// TODO tests
 	public void choisirMatriceCourante() {
 		int index = (int) (Math.random() * getNombreMatricesCandidates());
 		setMatriceCourante(listeMatricesCandidates.get(index));
 	}
 
 	@Override
-	// TODO tests
 	public void choisirMatriceCourante(int index) {
 		setMatriceCourante(listeMatricesCandidates.get(index));
 	}
 
 	@Override
-	// TODO tests
-	// TODO une erreur ici maintenant
 	public int[][] getCopieMatriceCourante() {
 		return getMatriceCourante().clone();
 	}
 
 	@Override
-	// TODO tests pis vérifer que jme suis pas fourré!
+	// TODO tests
+	// Semble marcher
 	public int[][] getMatriceCouranteInverseHill() {
 		int[][] temp = getCopieMatriceCourante();
 		int[][] adj = MatriceUtilitaires.getMatAdjointe(temp);
 		int det = MatriceUtilitaires.getDeterminant(temp);
 		int detHill = MatriceUtilitaires.getDeterminantInverseHill(det, getCoefDansZ());
-		temp = MatriceUtilitaires.getMatMultScalaire(adj, detHill / det);
+		temp = MatriceUtilitaires.getMatMultScalaire(adj, detHill);
 		// Reste juste à mettre le modulo
 		temp = MatriceUtilitaires.getMatModuloX(temp, getCoefDansZ());
 		return temp;
@@ -203,7 +200,6 @@ public class ListeMatricesChiffrement implements iMatrice {
 	 * @param pListe,
 	 *            la liste des combinatoires selon les données de l'objet...
 	 */
-	// TODO tests
 	private void genererListeMatrices(ListeCombinatoire pListe) {
 		this.listeMatricesCandidates = new LinkedList<int[][]>();
 		int limite = pListe.getTailleListeDeCombinaisons();

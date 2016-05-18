@@ -31,7 +31,6 @@ public class MessageChiffrerDechiffrer implements iCrypto {
 	 *
 	 * @throws ConstructeurException
 	 */
-	// TODO tests
 	public MessageChiffrerDechiffrer(VecteurDeCaracteres vecCars, ListeMatricesChiffrement listeMats,
 			SortedSet<String> dico) throws ConstructeurException {
 		if (validerDico(dico) && validerMatsEncodage(listeMats) && validerVecCaracteres(vecCars)) {
@@ -85,14 +84,13 @@ public class MessageChiffrerDechiffrer implements iCrypto {
 	}
 
 	@Override
-	// TODO tests
 	public boolean validerMessageSelonDico(String message, float pourcentageDeReussite) {
 		String[] mots = message.trim().split("\\s");
 		int nbCaracteres = 0;
 		int caracteresEgaux = 0;
 		for (int i = 0; i < mots.length; i++) {
 			nbCaracteres += mots[i].length();
-			if (dico.contains(mots[i])) {
+			if (dico.contains(mots[i].toLowerCase())) {
 				caracteresEgaux += mots[i].length();
 			}
 		}
@@ -101,29 +99,33 @@ public class MessageChiffrerDechiffrer implements iCrypto {
 	}
 
 	@Override
-	// TODO tests
 	public String ajusterMessageBrute(String message, int longVoulue) {
 		String s = message;
-		while (message.length() < longVoulue) {
+		while (s.length() < longVoulue) {
 			s += CAR_DE_COMPLEMENT;
 		}
 		return s;
 	}
 
-	//TODO TESTER SI ON S'EST PLANTÉS
 	public String codeDecode(String message, int[][] matrice) {
 		int dimension = listeMatricesCandidates.getDimension();
 		String texteModifie = "";
 		String boutDeTexte = "";
 		// ajuster la taille du message
-		int tailleMessage = message.length() + (dimension - (message.length() % dimension));
-		String messageAjuste = ajusterMessageBrute(message, tailleMessage);
+		int tailleMessage = message.length() + (dimension - (MathUtilitaires.modulo(message.length(), dimension)));
+		String messageAjuste = null;
+		if (tailleMessage != (message.length() + dimension)) {
+			messageAjuste = ajusterMessageBrute(message, tailleMessage);
+		} else {
+			messageAjuste = message;
+			tailleMessage -= dimension;
+		}
 		// Nombre de fois qu'on va multiplier
 		int nbPaquetsDeLettre = tailleMessage / dimension;
 		// On commence le traitement
 		for (int i = 0; i < nbPaquetsDeLettre; i++) {
 			// Bout à traiter
-			boutDeTexte = messageAjuste.substring(i * dimension, (i + 1) * dimension - 1);
+			boutDeTexte = messageAjuste.substring(i * dimension, (i + 1) * dimension);
 			// Tableau contenant les index de lettres à traiter
 			int[] tabValLettres = new int[dimension];
 			for (int j = 0; j < dimension; j++) {
@@ -139,7 +141,7 @@ public class MessageChiffrerDechiffrer implements iCrypto {
 			}
 			// Faire les modulo
 			for (int j = 0; j < dimension; j++) {
-				tabLettresModifiees[j] = tabLettresModifiees[j] % vecCaracteres.getTaille();
+				tabLettresModifiees[j] = MathUtilitaires.modulo(tabLettresModifiees[j], vecCaracteres.getTaille());
 			}
 			// Convertir indices en lettres
 			char[] tabLettresFinales = new char[dimension];
@@ -147,7 +149,7 @@ public class MessageChiffrerDechiffrer implements iCrypto {
 				tabLettresFinales[j] = vecCaracteres.getCaractere(tabLettresModifiees[j]);
 			}
 			// Ajouter les lettres à la string du message
-			for (int j = 0; j < dimension; j++){
+			for (int j = 0; j < dimension; j++) {
 				texteModifie += tabLettresFinales[j];
 			}
 		}
@@ -155,7 +157,6 @@ public class MessageChiffrerDechiffrer implements iCrypto {
 	}
 
 	@Override
-	// TODO tests
 	public String encoder(String message) {
 		// Setter la matrice courante
 		String s = codeDecode(message, getMatriceCourante());
@@ -163,11 +164,11 @@ public class MessageChiffrerDechiffrer implements iCrypto {
 	}
 
 	@Override
-	// TODO tests
 	public String decoder(String message) {
 		// Setter la matrice inverse de Hill
 		int[][] matrice = listeMatricesCandidates.getMatriceCouranteInverseHill();
 		String s = codeDecode(message, matrice);
+		s = s.trim();
 		return s;
 	}
 }
