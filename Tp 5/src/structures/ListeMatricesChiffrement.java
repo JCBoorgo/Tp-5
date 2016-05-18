@@ -170,6 +170,7 @@ public class ListeMatricesChiffrement implements iMatrice {
 
 	@Override
 	// TODO tests
+	// TODO une erreur ici maintenant
 	public int[][] getCopieMatriceCourante() {
 		return getMatriceCourante().clone();
 	}

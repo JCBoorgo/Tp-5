@@ -42,15 +42,14 @@ public class MatriceUtilitaires {
 	 *
 	 * @return la valeur du déterminant inverse ou 0
 	 */
-	// TODO tests
 	public static int getDeterminantInverseHill(int valDet, int valMod) {
 		TreeSet<Integer> premiers = (TreeSet<Integer>) MathUtilitaires.xPremierEntreEux(1, valMod);
 		boolean fini = false;
 		Iterator<Integer> iter = premiers.iterator();
 		int retour = 0;
-		while (!fini) {
+		while (!fini && iter.hasNext()) {
 			Integer temp = iter.next();
-			if (((temp * valDet) % valMod) == 1) {
+			if ((MathUtilitaires.modulo((temp * valDet), valMod)) == 1) {
 				fini = true;
 				retour = temp;
 			}
@@ -70,19 +69,15 @@ public class MatriceUtilitaires {
 	public static int[][] getMatCofacteurs(int[][] mat) {
 		int[][] matTemp = new int[mat.length][mat.length];
 		if (mat.length == 2) {
-			matTemp[0][0] = mat[1][1] * -1;
-			matTemp[1][1] = mat[0][0] * -1;
-			matTemp[0][1] = mat[1][0];
-			matTemp[1][0] = mat[0][1];
+			matTemp[0][0] = mat[1][1];
+			matTemp[1][1] = mat[0][0];
+			matTemp[0][1] = mat[1][0] * -1;
+			matTemp[1][0] = mat[0][1] * -1;
 		} else {
 			int mult = 0;
 			for (int i = 0; i < mat.length; i++) {
 				for (int j = 0; j < mat.length; j++) {
-					if ((mat.length % 2) == 0) {
-						mult = (int) Math.pow(-1, i + j);
-					} else {
-						mult = (int) Math.pow(-1, i + j + 1);
-					}
+					mult = (int) Math.pow(-1, i + j);
 					matTemp[i][j] = mult * getDeterminant(getMatMineur(i, j, mat));
 				}
 			}
@@ -101,7 +96,6 @@ public class MatriceUtilitaires {
 	 *
 	 * @return la matrice carrée M X N transposée
 	 */
-	// TODO tests
 	public static int[][] getMatTranspose(int[][] mat) {
 		int m = mat.length;
 		int n = mat[0].length;
@@ -124,7 +118,6 @@ public class MatriceUtilitaires {
 	 *
 	 * @return la matrice carrée N X N adjointe
 	 */
-	// TODO tests
 	public static int[][] getMatAdjointe(int[][] mat) {
 		return getMatTranspose(getMatCofacteurs(mat));
 	}
@@ -190,7 +183,6 @@ public class MatriceUtilitaires {
 	 *
 	 * @return la matrice résultante de la multiplication avec un scalaire
 	 */
-	// TODO tests
 	public static int[][] getMatMultScalaire(int[][] mat, float pScalaire) {
 		int m = mat.length;
 		int n = mat[0].length;
@@ -214,14 +206,13 @@ public class MatriceUtilitaires {
 	 *
 	 * @return la matrice résultante de l'application d'un modulo
 	 */
-	// TODO tests
 	public static int[][] getMatModuloX(int[][] mat, int pMod) {
 		int m = mat.length;
 		int n = mat[0].length;
 		int[][] modulee = new int[m][n];
 		for (int i = 0; i < m; i++) {
 			for (int j = 0; j < n; j++) {
-				modulee[i][j] = mat[i][j] % pMod;
+				modulee[i][j] = MathUtilitaires.modulo(mat[i][j], pMod);
 			}
 		}
 		return modulee;
@@ -244,7 +235,6 @@ public class MatriceUtilitaires {
 	 *
 	 * @return la chaîne de caractères
 	 */
-	// TODO tests
 	public static String toStringMat(int[][] pMat) {
 		String s = "";
 		for (int i = 0; i < pMat.length; i++) {

@@ -21,11 +21,12 @@ public class ListeCombinatoireTests {
 
 	@Test
 	public void test() {
-		// System.out.println(l1.toString());
-		// System.out.println(l2.toString());
-		// System.out.println(l3.toString());
+		System.out.println(l1.toString());
+		System.out.println(l2.toString());
+		System.out.println(l3.toString());
 		System.out.println(l4.toString());
 		// FONCTIONNE.
+		// Toutes les combinaisons ont été vérifiées, promis.
 	}
 
 }

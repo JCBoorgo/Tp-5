@@ -4,7 +4,6 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 public class MathUtilitaires {
-	//TODO Vrais tests, au moins ceux de Jocelyn passent
 
 	/**
 	 * Calcule de la factorielle d'une valeur > ou = à 1. Pourrait être récursif
@@ -14,7 +13,6 @@ public class MathUtilitaires {
 	 *
 	 * @return la valeur de la factorielle pour la valeur reçue.
 	 */
-	// TODO tests
 	public static double fact(int valFact) {
 		double retour = 0;
 		if (valFact <= 1) {
@@ -29,7 +27,7 @@ public class MathUtilitaires {
 	 * Retourne le modulo de valeurs positive ou négative reçue.
 	 *
 	 * Attention : Vérifier vos résultats surtout pour des valeurs négatives!!!
-	 * la calculatrice de Goolge donne les bons résultats
+	 * la calculatrice de Google donne les bons résultats
 	 *
 	 * @param pVal
 	 *            la valeur
@@ -41,7 +39,6 @@ public class MathUtilitaires {
 	 * @throws ArithmeticException
 	 *             pour la division par zéro.
 	 */
-	// TODO tests
 	public static int modulo(int pVal, int pMod) throws ArithmeticException {
 		int temp = pVal;
 		int vraiMod = Math.abs(pMod);
@@ -50,13 +47,16 @@ public class MathUtilitaires {
 		} else {
 			if (pVal > 0) {
 				while (temp >= vraiMod) {
-					temp -= Math.abs(vraiMod);
+					temp -= vraiMod;
 				}
 			} else {
 				while (temp < 0) {
-					temp += Math.abs(vraiMod);
+					temp += vraiMod;
 				}
 			}
+		}
+		if (pMod < 0){
+			temp -= vraiMod;
 		}
 		return temp;
 	}
@@ -71,7 +71,6 @@ public class MathUtilitaires {
 	 * @return un ensemble de diviseurs positifs ou null si la valeur est 0
 	 *         (infinité de valeurs).
 	 */
-	// TODO tests
 	public static SortedSet<Integer> diviseursDe(int pVal) {
 		int nombre = Math.abs(pVal);
 		int limite = (int) Math.floor(Math.sqrt(nombre));
@@ -100,7 +99,6 @@ public class MathUtilitaires {
 	 *
 	 * @return vrai si la valeur reçue est un nombre premier, faux sinon
 	 */
-	// TODO tests
 	public static boolean estPremier(int pVal) {
 		SortedSet<Integer> diviseurs = diviseursDe(pVal);
 		return (diviseurs.size() == 2);
@@ -115,13 +113,15 @@ public class MathUtilitaires {
 	 * @return un ensemble des X nombres premiers ou null si aucun nombre
 	 *         premier trouvé.
 	 */
-	// TODO tests
 	public static SortedSet<Integer> xPremier(int pVal) {
 		TreeSet<Integer> liste = new TreeSet<Integer>();
 		for (int i = 1; i <= pVal; i++) {
 			if (estPremier(i)) {
 				liste.add(new Integer(i));
 			}
+		}
+		if (liste.size() == 0){
+			liste = null;
 		}
 		return liste;
 	}
@@ -149,19 +149,17 @@ public class MathUtilitaires {
 	 * @return un ensemble des X nombres "premiers entres eux" avec valRef à
 	 *         partir de valDepart reçue ou null.
 	 */
-	// TODO tests
 	public static SortedSet<Integer> xPremierEntreEux(int valDepart, int valRef) {
 		int debut = valDepart;
 		if (valDepart < 0) {
 			debut = 1;
 		}
-		SortedSet<Integer> diviseurs = diviseursDe(valRef);
 		SortedSet<Integer> premiers = new TreeSet<Integer>();
 		if (valDepart <= 1) {
 			premiers.add(new Integer(1));
 		}
 		for (int i = debut; i < valRef; i++) {
-			if (!diviseurs.contains(new Integer(i))) {
+			if (PGCD(i, valRef) == 1) {
 				premiers.add(new Integer(i));
 			}
 		}
@@ -201,7 +199,6 @@ public class MathUtilitaires {
 			}
 		} else {
 			nombre = 0;
-			;
 		}
 		return nombre;
 	}
@@ -217,7 +214,6 @@ public class MathUtilitaires {
 	 *
 	 * @return la valeur générée aléatoirement.
 	 */
-	// TODO tests
 	public static int alea(int pMin, int pMax) {
 		int nombre = 0;
 		if (pMin < pMax) {
@@ -243,7 +239,6 @@ public class MathUtilitaires {
 	 *
 	 * @return le nombre de combinaison possible.
 	 */
-	// TODO tests...?
 	public static int nbrCombinaison(int nbrElement, int nbrElementPris) {
 		return (int) ((MathUtilitaires.fact(nbrElement) / MathUtilitaires.fact(nbrElement - nbrElementPris))
 				/ MathUtilitaires.fact(nbrElementPris));

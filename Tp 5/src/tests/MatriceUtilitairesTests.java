@@ -47,27 +47,71 @@ public class MatriceUtilitairesTests {
 	}
 
 	@Test
-	public void getDeterminantTest() {
-		System.out.println(MatriceUtilitaires.getDeterminant(m1));
-		System.out.println(MatriceUtilitaires.getDeterminant(m2));
-		System.out.println(MatriceUtilitaires.getDeterminant(m3));
-		//Fonctionne
+	public void testGetDeterminant() {
+		assertTrue(MatriceUtilitaires.getDeterminant(m1) == -1);
+		assertTrue(MatriceUtilitaires.getDeterminant(m2) == 117);
+		assertTrue(MatriceUtilitaires.getDeterminant(m3) == -279);
 	}
-	
+
 	@Test
-	public void getMatMineurTest(){
+	public void testGetMatMineur() {
+		System.out.println("Mineures");
 		System.out.println(MatriceUtilitaires.toStringMat(m2));
 		System.out.println(MatriceUtilitaires.toStringMat(MatriceUtilitaires.getMatMineur(0, 0, m2)));
 		System.out.println(MatriceUtilitaires.toStringMat(MatriceUtilitaires.getMatMineur(1, 0, m2)));
-		//Fonctionne aussi
+		// Fonctionne
 	}
-	
+
 	@Test
-	public void getMatCofacteursTest(){
+	public void testGetMatCofacteurs() {
+		System.out.println("Cofacteurs");
 		System.out.println(MatriceUtilitaires.toStringMat(MatriceUtilitaires.getMatCofacteurs(m1)));
 		System.out.println(MatriceUtilitaires.toStringMat(MatriceUtilitaires.getMatCofacteurs(m2)));
 		System.out.println(MatriceUtilitaires.toStringMat(MatriceUtilitaires.getMatCofacteurs(m3)));
-		//Fonctionnel
+		// Fonctionne
+	}
+
+	@Test
+	public void testGetMatTranspose() {
+		System.out.println("Transposées");
+		System.out.println(MatriceUtilitaires.toStringMat(MatriceUtilitaires.getMatTranspose(m1)));
+		System.out.println(MatriceUtilitaires.toStringMat(MatriceUtilitaires.getMatTranspose(m2)));
+		System.out.println(MatriceUtilitaires.toStringMat(MatriceUtilitaires.getMatTranspose(m3)));
+		// Fonctionne
+	}
+	
+	@Test
+	public void testGetMatAdjointe() {
+		System.out.println("Adjointes");
+		System.out.println(MatriceUtilitaires.toStringMat(MatriceUtilitaires.getMatAdjointe(m1)));
+		System.out.println(MatriceUtilitaires.toStringMat(MatriceUtilitaires.getMatAdjointe(m2)));
+		System.out.println(MatriceUtilitaires.toStringMat(MatriceUtilitaires.getMatAdjointe(m3)));
+		// Fonctionne
+	}
+	
+	@Test
+	public void testGetMatMultScalaire() {
+		System.out.println("Multipliées par un scalaire");
+		System.out.println(MatriceUtilitaires.toStringMat(MatriceUtilitaires.getMatMultScalaire(m1, 2)));
+		System.out.println(MatriceUtilitaires.toStringMat(MatriceUtilitaires.getMatMultScalaire(m2, -1)));
+		System.out.println(MatriceUtilitaires.toStringMat(MatriceUtilitaires.getMatMultScalaire(m3, 5)));
+		// Fonctionne
+	}
+	
+	@Test
+	public void testGetMatModuloX() {
+		System.out.println("Modulos");
+		System.out.println(MatriceUtilitaires.toStringMat(MatriceUtilitaires.getMatModuloX(m1, 3)));
+		System.out.println(MatriceUtilitaires.toStringMat(MatriceUtilitaires.getMatModuloX(m2, 5)));
+		System.out.println(MatriceUtilitaires.toStringMat(MatriceUtilitaires.getMatModuloX(m3, 2)));
+		// Fonctionne
+	}
+	
+	@Test
+	public void testGetDeterminantInverseHill() {
+		assertTrue(MatriceUtilitaires.getDeterminantInverseHill(-32, 27) == 16);
+		assertTrue(MatriceUtilitaires.getDeterminantInverseHill(5221, 27) == 19);
+		assertTrue(MatriceUtilitaires.getDeterminantInverseHill(18, 27) == 0);
 	}
 
 }

@@ -98,15 +98,12 @@ public class VecteurDeCaracteres {
 	 * </pre>
 	 */
 	// TODO tests
-	// TODO y'a une erreur qui pop ici.
 	@Override
 	public String toString() {
-		ListIterator temp = this.tableCaracteres.listIterator(0);
 		String s = "";
-		while (temp.hasNext()) {
-			s += (String) temp.next();
-			s += ", ";
+		for (int i = 0; i < tableCaracteres.size(); i++){
+			s += tableCaracteres.get(i) + ", ";
 		}
-		return "Table de correspondance = " + "[" + s + "]";
+		return "Table de correspondance = [" + s + "]";
 	}
 }
